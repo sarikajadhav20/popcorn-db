@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import MovieCard from '../components/movieCard.jsx';
+import MovieRating from '../components/movieRating.jsx';
 import { Search as SearchIcon, TrashIcon } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -17,6 +18,15 @@ function Home() {
     } catch (error) {
       toast.error("Error loading movies");
     }
+  };
+
+  // Update rating in local state (after save button in MovieRating is clicked)
+  const handleRatingUpdate = (movieId, newRating) => {
+    setMovies((prevMovies) =>
+      prevMovies.map((m) =>
+        m._id === movieId ? { ...m, rating: newRating } : m
+      )
+    );
   };
 
   useEffect(() => {
@@ -107,6 +117,14 @@ function Home() {
                 language={language}
                 rating={rating}
               />
+
+           {/* Movie Rating Component */}
+           <MovieRating
+  movieId={movieObj._id}
+  initialRating={movieObj.rating || 0}
+  onRatingUpdate={handleRatingUpdate}
+/>
+
             </div>
           );
         })}
